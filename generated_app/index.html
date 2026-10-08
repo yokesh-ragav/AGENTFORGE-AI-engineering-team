@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinTrack - Personal Finance Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts for modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="light-theme">
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <h1>FinTrack</h1>
+        <span class="badge">Pro</span>
+      </div>
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button id="demo-data-btn" class="btn btn-secondary">Load Demo Data</button>
+        <button id="export-btn" class="btn btn-secondary icon-btn-text" title="Export to JSON">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export
+        </button>
+        <label for="import-file" class="btn btn-secondary icon-btn-text cur-pointer" title="Import JSON">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Import
+        </label>
+        <input type="file" id="import-file" accept=".json" style="display: none;">
+      </div>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- STATS OVERVIEW CARDS -->
+    <section class="overview-grid">
+      <div class="stat-card balance-card">
+        <div class="stat-header">
+          <span>Net Balance</span>
+          <div class="stat-icon balance-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="10" x2="12" y2="10"></line><line x1="12" y1="14" x2="12" y2="14"></line></svg>
+          </div>
+        </div>
+        <div class="stat-amount" id="balance-amount">₹0.00</div>
+        <div class="stat-footer" id="balance-trend">
+          <span class="trend-neutral">No transactions recorded yet</span>
+        </div>
+      </div>
+
+      <div class="stat-card income-card">
+        <div class="stat-header">
+          <span>Total Income</span>
+          <div class="stat-icon income-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+          </div>
+        </div>
+        <div class="stat-amount text-success" id="total-income">₹0.00</div>
+        <div class="stat-footer">
+          <span id="income-count">0 items</span>
+        </div>
+      </div>
+
+      <div class="stat-card expense-card">
+        <div class="stat-header">
+          <span>Total Expenses</span>
+          <div class="stat-icon expense-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+          </div>
+        </div>
+        <div class="stat-amount text-danger" id="total-expenses">₹0.00</div>
+        <div class="stat-footer">
+          <span id="expense-count">0 items</span>
+        </div>
+      </div>
+
+      <div class="stat-card savings-card">
+        <div class="stat-header">
+          <span>Savings Rate</span>
+          <div class="stat-icon savings-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+        </div>
+        <div class="stat-amount text-primary" id="savings-rate">0%</div>
+        <div class="stat-footer">
+          <div class="progress-bar-container mini">
+            <div class="progress-bar-fill bg-primary" id="savings-progress" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT BODY Grid -->
+    <div class="dashboard-body">
+      
+      <!-- LEFT COLUMN: Forms, Budgets, Analytics -->
+      <aside class="sidebar-section">
+        
+        <!-- TRANSACTION FORM CARD -->
+        <div class="card form-card">
+          <div class="card-header">
+            <h2 id="form-title">Add Transaction</h2>
+            <button id="cancel-edit-btn" class="btn btn-secondary btn-xs" style="display: none;">Cancel Edit</button>
+          </div>
+          <form id="transaction-form" novalidate>
+            <input type="hidden" id="tx-id">
+            
+            <div class="form-group-row">
+              <div class="form-group">
+                <label for="tx-type">Transaction Type <span class="required">*</span></label>
+                <select id="tx-type" required>
+                  <option value="expense" selected>Expense</option>
+                  <option value="income">Income</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="tx-amount">Amount (₹) <span class="required">*</span></label>
+                <input type="text" id="tx-amount" placeholder="₹0.00" required>
+                <div class="error-msg" id="amount-error">Please enter a valid positive number.</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tx-description">Description <span class="required">*</span></label>
+              <input type="text" id="tx-description" placeholder="e.g., Grocery Shopping, Salary" required maxlength="60">
+              <div class="error-msg" id="desc-error">Description is required.</div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label for="tx-category">Category <span class="required">*</span></label>
+                <select id="tx-category" required>
+                  <option value="Other" selected>Other</option>
+                  <option value="Housing">Housing</option>
+                  <option value="Groceries">Groceries</option>
+                  <option value="Utilities">Utilities</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Dining Out">Dining Out</option>
+                  <option value="Salary">Salary</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Investments">Investments</option>
+                </select>
+                <div class="error-msg" id="category-error">Please choose a category.</div>
+              </div>
+              <div class="form-group">
+                <label for="tx-date">Date <span class="required">*</span></label>
+                <input type="date" id="tx-date" required>
+                <div class="error-msg" id="date-error">Please select a valid date.</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tx-notes">Notes <span class="optional">(Optional)</span></label>
+              <textarea id="tx-notes" rows="2" placeholder="Add custom details..." maxlength="200"></textarea>
+            </div>
+
+            <button type="submit" id="add-transaction-btn" class="btn btn-primary btn-block">Add Expense</button>
+          </form>
+        </div>
+
+        <!-- BUDGET CONTROL CARD -->
+        <div class="card budget-card">
+          <div class="card-header flex-header">
+            <div>
+              <h2>Category Budgets</h2>
+              <p class="subtitle">Set limits and track your limits</p>
+            </div>
+            <button id="manage-budgets-btn" class="btn btn-secondary btn-xs">Set Budget</button>
+          </div>
+          
+          <!-- Modal or Inline form to quickly set a budget -->
+          <div id="budget-input-group" class="budget-input-panel hidden">
+            <div class="form-group-row compact">
+              <select id="budget-category">
+                <option value="Housing">Housing</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Transport">Transport</option>
+                <option value="Dining Out">Dining Out</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="text" id="budget-amount" placeholder="Limit (₹)">
+              <button id="save-budget-btn" class="btn btn-primary btn-sm">Set</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Budget Progress Bars -->
+          <div id="budget-container" class="budget-list">
+            <!-- Dynamically Loaded Budgets -->
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- RIGHT COLUMN: Interactive Charts, Filter & List -->
+      <section class="main-content-section">
+        
+        <!-- ANALYTICS VISUALIZATION CARD -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h2>Expense Breakdown</h2>
+            <div class="chart-legend-container" id="chart-legend">
+              <!-- Dynamically populated color indicators -->
+            </div>
+          </div>
+          
+          <div class="chart-wrapper">
+            <!-- Custom CSS & HTML-based responsive bar breakdown -->
+            <div id="chart-visual" class="custom-chart-bars">
+              <!-- Dynamic styled bars -->
+              <div class="empty-chart-state">
+                <p>No expense data available to visualize. Add expenses to populate the analysis chart.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSACTION TABLE & LIST CARD -->
+        <div class="card list-card">
+          <div class="list-filters-bar">
+            
+            <div class="filter-search-box">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="filter-search" placeholder="Search description or notes...">
+            </div>
+
+            <div class="filter-controls">
+              <div class="select-wrapper">
+                <select id="filter-type">
+                  <option value="all">All Types</option>
+                  <option value="expense">Expenses Only</option>
+                  <option value="income">Incomes Only</option>
+                </select>
+              </div>
+
+              <div class="select-wrapper">
+                <select id="filter-category">
+                  <option value="all">All Categories</option>
+                  <option value="Housing">Housing</option>
+                  <option value="Groceries">Groceries</option>
+                  <option value="Utilities">Utilities</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Dining Out">Dining Out</option>
+                  <option value="Salary">Salary</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Investments">Investments</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="select-wrapper">
+                <select id="sort-by">
+                  <option value="date-desc">Newest First</option>
+                  <option value="date-asc">Oldest First</option>
+                  <option value="amount-desc">Highest Amount</option>
+                  <option value="amount-asc">Lowest Amount</option>
+                </select>
+              </div>
+
+              <button id="clear-filters-btn" class="btn btn-secondary btn-sm icon-btn" title="Clear Filters">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="table-responsive">
+            <table class="transactions-table">
+              <thead>
+                <tr>
+                  <th width="15%">Date</th>
+                  <th width="35%">Description / Notes</th>
+                  <th width="15%">Category</th>
+                  <th width="15%">Type</th>
+                  <th width="10%" class="text-right">Amount</th>
+                  <th width="10%" class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transaction-rows">
+                <!-- Dynamically Rendered Rows -->
+              </tbody>
+            </table>
+
+            <!-- Empty State container -->
+            <div id="empty-state" class="empty-state hidden">
+              <div class="empty-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              </div>
+              <h3>No transactions match your search criteria.</h3>
+              <p>Try clearing your filters or creating a new transaction log.</p>
+              <button id="empty-reset-btn" class="btn btn-primary">Add Demo Data</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p>&copy; <span id="year-label"></span> FinTrack Personal Finance Engine. Responsive self-contained client app.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
